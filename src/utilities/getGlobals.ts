@@ -1,26 +1,32 @@
-import type { Config } from 'src/payload-types'
+import type { Footer, Header } from '@/payload-types'
+import type { SiteOptionsType } from '@/globals/siteOptions/types'
+import { cache } from 'react'
 
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { unstable_cache } from 'next/cache'
+type GlobalSlug = 'header' | 'footer' | 'site-options'
 
-type Global = keyof Config['globals']
+type DataFromGlobalSlug<T extends GlobalSlug> = T extends 'header'
+  ? Header
+  : T extends 'footer'
+  ? Footer
+  : T extends 'site-options'
+  ? Partial<SiteOptionsType>
+  : never
 
-async function getGlobal(slug: Global, depth = 0) {
-  const payload = await getPayload({ config: configPromise })
+export const getCachedGlobal = <T extends GlobalSlug>(slug: T, depth: number = 1) => {
+  return cache(async (): Promise<DataFromGlobalSlug<T>> => {
+    const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/globals/${slug}?depth=${depth}`
+    const res = await fetch(url, {
+      next: {
+        revalidate: process.env.VERCEL_ENV === 'preview' ? 0 : 300,
+        tags: [`globals_${slug}`],
+      },
+    })
 
-  const global = await payload.findGlobal({
-    slug,
-    depth,
+    if (!res.ok) {
+      throw new Error(`Failed to fetch global "${slug}"`)
+    }
+
+    const data = await res.json()
+    return data
   })
-
-  return global
 }
-
-/**
- * Returns a unstable_cache function mapped with the cache tag for the slug
- */
-export const getCachedGlobal = (slug: Global, depth = 0) =>
-  unstable_cache(async () => getGlobal(slug, depth), [slug], {
-    tags: [`global_${slug}`],
-  })
