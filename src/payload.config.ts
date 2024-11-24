@@ -23,7 +23,7 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     meta: {
-      titleSuffix: '- Drizzl CMS [Staging]',
+      titleSuffix: process.env.VERCEL_ENV === 'preview' ? '- Drizzl CMS [Staging]' : '- Drizzl CMS',
     },
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
