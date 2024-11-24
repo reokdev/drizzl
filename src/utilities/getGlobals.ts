@@ -12,9 +12,28 @@ type DataFromGlobalSlug<T extends GlobalSlug> = T extends 'header'
   ? Partial<SiteOptionsType>
   : never
 
+const getServerURL = () => {
+  if (process.env.NEXT_PUBLIC_SERVER_URL) {
+    return process.env.NEXT_PUBLIC_SERVER_URL
+  }
+  
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  }
+
+  return process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000' 
+    : ''
+}
+
 export const getCachedGlobal = <T extends GlobalSlug>(slug: T, depth: number = 1) => {
   return cache(async (): Promise<DataFromGlobalSlug<T>> => {
-    const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/globals/${slug}?depth=${depth}`
+    const serverURL = getServerURL()
+    if (!serverURL) {
+      throw new Error('Server URL is not defined')
+    }
+
+    const url = `${serverURL}/api/globals/${slug}?depth=${depth}`
     const res = await fetch(url, {
       next: {
         revalidate: process.env.VERCEL_ENV === 'preview' ? 0 : 300,
