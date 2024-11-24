@@ -45,10 +45,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-options': SiteOption;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-options': SiteOptionsSelect<false> | SiteOptionsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1311,6 +1313,32 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-options".
+ */
+export interface SiteOption {
+  id: string;
+  siteName: string;
+  contact?: {
+    address?: string | null;
+    email?: string | null;
+    phone?: string | null;
+  };
+  social?: {
+    twitter?: string | null;
+    facebook?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+  };
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -1352,6 +1380,38 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-options_select".
+ */
+export interface SiteOptionsSelect<T extends boolean = true> {
+  siteName?: T;
+  contact?:
+    | T
+    | {
+        address?: T;
+        email?: T;
+        phone?: T;
+      };
+  social?:
+    | T
+    | {
+        twitter?: T;
+        facebook?: T;
+        instagram?: T;
+        linkedin?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
       };
   updatedAt?: T;
   createdAt?: T;
