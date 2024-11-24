@@ -46,6 +46,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 }
 
 export const metadata: Metadata = {
+  title: process.env.VERCEL_ENV === 'preview' 
+    ? 'Drizzl CMS [Staging]'
+    : 'Drizzl CMS',
   metadataBase: new URL(getServerSideURL()),
   openGraph: mergeOpenGraph(),
   twitter: {
