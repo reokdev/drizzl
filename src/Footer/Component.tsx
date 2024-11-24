@@ -9,9 +9,16 @@ import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 
 export async function Footer() {
-  const footer: Footer = await getCachedGlobal('footer', 1)()
-
-  const navItems = footer?.navItems || []
+  const footerData = await getCachedGlobal('footer', 1)()
+  
+  // Ensure we have a valid Footer object with required fields
+  const footer: Footer = {
+    id: footerData?.id || 'default',
+    logo: footerData?.logo || '/logo.svg', // Provide default logo path
+    navItems: footerData?.navItems || [],
+    createdAt: footerData?.createdAt || new Date().toISOString(),
+    updatedAt: footerData?.updatedAt || new Date().toISOString(),
+  }
 
   return (
     <footer className="border-t border-border bg-black dark:bg-card text-white">
@@ -23,7 +30,7 @@ export async function Footer() {
         <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
           <ThemeSelector />
           <nav className="flex flex-col md:flex-row gap-4">
-            {navItems.map(({ link }, i) => {
+            {footer.navItems?.map(({ link }, i) => {
               return <CMSLink className="text-white" key={i} {...link} />
             })}
           </nav>
