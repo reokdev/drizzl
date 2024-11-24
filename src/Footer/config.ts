@@ -10,6 +10,15 @@ export const Footer: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Footer Logo',
+      admin: {
+        description: 'Upload your footer logo (recommended size: 193x34px)',
+      },
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [
