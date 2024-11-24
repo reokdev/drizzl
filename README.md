@@ -11,17 +11,6 @@ A modern, headless CMS built with PayloadCMS, Next.js, and MongoDB Atlas. This p
 - **Authentication**: Built-in PayloadCMS auth
 - **Deployment**: Vercel
 
-## 🌐 Environments
-
-### Production
-- URL: https://drizzl-cms.vercel.app
-- Admin Dashboard: https://drizzl-cms.vercel.app/admin
-
-### Staging
-- URL: https://drizzl-99711elvh-rachael-oldham-knotts-projects.vercel.app
-- Admin Dashboard: https://drizzl-99711elvh-rachael-oldham-knotts-projects.vercel.app/admin
-- Identifier: Look for "[Staging]" in admin panel title
-
 ## 🔄 Development Workflow
 
 1. Clone and Install
@@ -52,7 +41,7 @@ git push origin staging
 
 ## 🗄️ Database
 
-- Single MongoDB Atlas database for both environments
+- MongoDB Atlas database
 - Use "[TEST]" prefix for staging content
 - Database automatically backs up through MongoDB Atlas
 
